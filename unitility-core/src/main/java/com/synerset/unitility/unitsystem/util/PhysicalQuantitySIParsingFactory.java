@@ -75,7 +75,7 @@ final class PhysicalQuantitySIParsingFactory extends PhysicalQuantityAbstractPar
                 Map.entry(Pressure.class, Pressure::of),
                 Map.entry(SpecificEnthalpy.class, (value, symbol) -> SpecificEnthalpy.ofJoulePerKiloGram(value)),
                 Map.entry(SpecificHeat.class, SpecificHeat::of),
-                Map.entry(Temperature.class, Temperature::of),
+                Map.entry(Temperature.class, (value, symbol) -> Temperature.ofKelvins(value)),
                 Map.entry(ThermalConductivity.class, ThermalConductivity::of),
                 Map.entry(ThermalDiffusivity.class, ThermalDiffusivity::of),
                 // Geographic
