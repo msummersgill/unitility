@@ -63,4 +63,8 @@ public interface PhysicalQuantityParsingFactory {
         return PhysicalQuantityDefaultParsingFactory.getInstance();
     }
 
+   static PhysicalQuantityParsingFactory getSIParsingFactory(){
+       return PhysicalQuantitySIParsingFactory.getInstance();
+   }
+
 }

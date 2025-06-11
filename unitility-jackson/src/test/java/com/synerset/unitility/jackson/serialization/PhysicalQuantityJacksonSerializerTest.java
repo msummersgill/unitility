@@ -41,6 +41,32 @@ class PhysicalQuantityJacksonSerializerTest {
         assertThat(longitudeAsString).isEqualTo(expectedJsonLon);
     }
 
+   @Test
+   void serialize_shouldSerializePhysicalQuantityToJsonWithoutUnitsIfDirected() throws JsonProcessingException {
+       // Given
+       Temperature temperature = Temperature.ofCelsius(20);
+       Latitude latitude = Latitude.ofRadians(-0.311);
+       Longitude longitude = Longitude.ofRadians(-0.311);
+
+       PhysicalQuantityParsingFactory DEFAULT_PARSING_FACTORY = PhysicalQuantityParsingFactory.getDefaultParsingFactory();
+
+       ObjectMapper objectMapper = new ObjectMapper();
+       objectMapper.registerModule(new PhysicalQuantityJacksonModule(DEFAULT_PARSING_FACTORY, false));
+
+       // When
+       String temperatureAsJson = objectMapper.writeValueAsString(temperature);
+       String latitudeAsString = objectMapper.writeValueAsString(latitude);
+       String longitudeAsString = objectMapper.writeValueAsString(longitude);
+
+       // Then
+       String expectedJsonTemp = "293.15";
+       String expectedJsonLat = "-0.311";
+       String expectedJsonLon = "-0.311";
+       assertThat(temperatureAsJson).isEqualTo(expectedJsonTemp);
+       assertThat(latitudeAsString).isEqualTo(expectedJsonLat);
+       assertThat(longitudeAsString).isEqualTo(expectedJsonLon);
+   }
+
     @Test
     void serialize_shouldSerializeGeoGraphicQuantitiesToJSON() throws JsonProcessingException {
         // Given

@@ -20,11 +20,30 @@ public class PhysicalQuantityJacksonModule extends SimpleModule {
 
     public PhysicalQuantityJacksonModule(PhysicalQuantityParsingFactory parsingRegistry) {
         super("PhysicalQuantityJacksonModule");
+        /* SERIALIZERS */
+        JavaType type = TypeFactory.defaultInstance().constructParametricType(PhysicalQuantity.class, Unit.class);
+        // Handles all PhysicalQuantity implementations
+        addSerializer(new PhysicalQuantitySerializer(type, true));
+        // Special type
+        addSerializer(new GeoDistanceSerializer(GeoDistance.class));
+
+        /* DESERIALIZERS */
+        parsingRegistry.findAllRegisteredClasses()
+                .forEach(quantityClass -> addDeserializer(
+                        quantityClass,
+                        new PhysicalQuantityDeserializer<>(quantityClass, parsingRegistry))
+                );
+
+        addDeserializer(GeoDistance.class, new GeoDistanceDeserializer(parsingRegistry));
+    }
+
+    public PhysicalQuantityJacksonModule(PhysicalQuantityParsingFactory parsingRegistry, boolean serializeUnits) {
+        super("PhysicalQuantityJacksonModule");
 
         /* SERIALIZERS */
         JavaType type = TypeFactory.defaultInstance().constructParametricType(PhysicalQuantity.class, Unit.class);
         // Handles all PhysicalQuantity implementations
-        addSerializer(new PhysicalQuantitySerializer(type));
+        addSerializer(new PhysicalQuantitySerializer(type, serializeUnits));
         // Special type
         addSerializer(new GeoDistanceSerializer(GeoDistance.class));
 

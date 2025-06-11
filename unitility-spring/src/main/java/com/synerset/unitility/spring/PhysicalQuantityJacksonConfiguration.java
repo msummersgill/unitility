@@ -34,6 +34,22 @@ class PhysicalQuantityJacksonConfiguration {
     }
 
     /**
+     * Creates a {@link Jackson2ObjectMapperBuilderCustomizer} that registers the {@link PhysicalQuantityJacksonModule}.
+     * This bean is responsible for customizing the Jackson {@link ObjectMapper} by adding the
+     * {@link PhysicalQuantityJacksonModule} to the module registry.
+     *
+     * @param parsingFactory The {@link PhysicalQuantityJacksonModule} used to create the {@link PhysicalQuantityJacksonModule}.
+     * @return A {@link Jackson2ObjectMapperBuilderCustomizer}.
+     */
+    @Bean
+    Jackson2ObjectMapperBuilderCustomizer createPhysicalQuantityJacksonModuleNoUnits(@Qualifier("SIParsingFactory") PhysicalQuantityParsingFactory parsingFactory) {
+
+        return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.modules(
+                new PhysicalQuantityJacksonModule(parsingFactory, false)
+        );
+    }
+
+    /**
      * Creates a default {@link PhysicalQuantityParsingFactory} bean.
      * This bean is responsible for creating and providing a default {@link PhysicalQuantityParsingFactory} instance.
      *
@@ -43,6 +59,18 @@ class PhysicalQuantityJacksonConfiguration {
     PhysicalQuantityParsingFactory defaultParsingFactory() {
         return PhysicalQuantityParsingFactory.getDefaultParsingFactory();
     }
+
+    /**
+     * Creates a default {@link PhysicalQuantityParsingFactory} bean.
+     * This bean is responsible for creating and providing a default {@link PhysicalQuantityParsingFactory} instance.
+     *
+     * @return A SI {@link PhysicalQuantityParsingFactory}.
+     */
+    @Bean
+    PhysicalQuantityParsingFactory SIParsingFactory() {
+        return PhysicalQuantityParsingFactory.getSIParsingFactory();
+    }
+
 
     @Bean
     PhysicalQuantityParsingFactory geoParsingFactory() {
